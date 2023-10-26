@@ -42,7 +42,7 @@ def httpDeleteProject(id):
     try:
         response = requests.delete(f"{API_URL}/{id}")
 
-        if response.status_code == 204:
+        if response.status_code == 200:
             print("DELETE project request was successful. Resource deleted.")
         else:
             print(f"DELETE project request failed with status code: {response.status_code}")
@@ -65,16 +65,21 @@ def httpAddNewCase(id, addCase):
     except requests.exceptions.RequestException as e:
         print("An error occurred addCase:", e)
 
+
+
 def httpDeleteCase(id, caseId):
     try:
         response = requests.delete(f"{API_URL}/case/{id}/{caseId}")
 
-        if response.status_code == 204:
+        if response.status_code == 200:
             print("DELETE case request was successful. Resource deleted.")
         else:
             print(f"DELETE case request failed with status code: {response.status_code}")
     except requests.exceptions.RequestException as e:
         print(f"An error occurred at delete case: {e}")
+
+# httpDeleteCase(1,3)
+
 
 def httpAddNewDim(id, newDim):
     try:
@@ -96,7 +101,7 @@ def httpDeleteDim(id, dimId):
     try:
         response = requests.delete(f"{API_URL}/dim/{id}/{dimId}")
 
-        if response.status_code == 204:
+        if response.status_code == 200:
             print("DELETE dim request was successful. Resource deleted.")
         else:
             print(f"DELETE dim request failed with status code: {response.status_code}")
@@ -123,7 +128,7 @@ def httpDeleteCaseDim(id, idCase, caseDimID):
     try:
         response = requests.delete(f"{API_URL}/dimCase/{id}/{idCase}/{caseDimID}")
 
-        if response.status_code == 204:
+        if response.status_code == 200:
             print("DELETE dimCase request was successful. Resource deleted.")
         else:
             print(f"DELETE dimCase request failed with status code: {response.status_code}")
@@ -150,7 +155,7 @@ def httpDeleteImg(id, dimId, idImg):
     try:
         response = requests.delete(f"{API_URL}/image/{id}/{dimId}/{idImg}")
 
-        if response.status_code == 204:
+        if response.status_code == 200:
             print("DELETE dimCase request was successful. Resource deleted.")
         else:
             print(f"DELETE dimCase request failed with status code: {response.status_code}")

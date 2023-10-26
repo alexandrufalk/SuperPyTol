@@ -69,25 +69,10 @@ def open_new_window():
     last_name_entry.pack()
 
     # Button to fetch data from the server and save to a file
-    fetch_data_button = ttk.Button(new_window, text="Fetch Data and Save", command=fetch_data_and_save)
+    fetch_data_button = ttk.Button(new_window, text="Fetch Data and Save", command=httpGetAllProjects)
     fetch_data_button.pack()
 
-def fetch_data_and_save():
-    API_URL = "http://localhost:5001/v1/databaseproject"
-    try:
-        response = requests.get(API_URL)
-        data = response.text  # Assuming the response is text data
 
-        # Display the fetched data in a messagebox
-        messagebox.showinfo("Fetched Data", f"Data from the server: {data}")
-
-        # Save the fetched data to a text file
-        with open("fetched_data.txt", "w") as file:
-            file.write(data)
-            messagebox.showinfo("Data Saved", "Fetched data saved to 'fetched_data.txt'")
-
-    except requests.exceptions.RequestException as e:
-        messagebox.showerror("Error", f"Failed to fetch data: {e}")
 
 def refresh_window():
     # Redraw the window
