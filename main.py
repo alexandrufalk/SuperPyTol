@@ -1,28 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-import requests
-import keyboard
-import threading
-import time
-import os
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
-from hotreload import Loader
 from RequestsModules.my_requests import httpGetAllProjects
 
-class Handler(FileSystemEventHandler):
-
-    def __init__(self, gui_started_event):
-        self.gui_started_event = gui_started_event
-        self.gui_started = False
-
-    def on_modified(self, event):
-        if not event.is_directory and event.src_path.endswith(".py"):
-            # Code file was modified; recreate the GUI
-            if self.gui_started:
-                self.gui_started_event.set()  # Signal to close the previous GUI
-            print("Code file modified. Reloading GUI...")
       
 
 def enter_data():
@@ -30,11 +10,11 @@ def enter_data():
     
     if accepted=="Accepted":
         # User info
-        firstname = first_name_entry.get()
+        firstname = project_name_entry.get()
         lastname = last_name_entry.get()
         
         if firstname and lastname:
-            title = title_combobox.get()
+            title = project_combobox.get()
             age = age_spinbox.get()
             nationality = nationality_combobox.get()
             
@@ -58,10 +38,10 @@ def open_new_window():
     new_window = tk.Toplevel()
     new_window.title("New Window")
 
-    first_name_label = ttk.Label(new_window, text="First Name:")
-    first_name_label.pack()
-    first_name_entry = ttk.Entry(new_window)
-    first_name_entry.pack()
+    project_name_label = ttk.Label(new_window, text="First Name:")
+    project_name_label.pack()
+    project_name_entry = ttk.Entry(new_window)
+    project_name_entry.pack()
 
     last_name_label = ttk.Label(new_window, text="Last Name:")
     last_name_label.pack()
@@ -73,14 +53,22 @@ def open_new_window():
     fetch_data_button.pack()
 
 
-
-def refresh_window():
-    # Redraw the window
-    window.update()
-    window.update_idletasks()
-    print("Refresh completed.")
+selected_project = None  # Initialize it as None
+filtered_summary=[]
+table_frame = None  # Initialize table_frame as a global variable
 
 def create_gui():
+    global table, table_window  # Declare table as a global variable
+    databaseSummary=httpGetAllProjects()
+
+    def extract_project_names(data):
+        project_names = [item['ProjectName'] for item in data]
+        project_names.append("New Project")
+        return project_names
+    
+    project_names = extract_project_names(databaseSummary)
+    print("project_names",project_names)
+
     try:
         window = tk.Tk()
         window.title("SuperPyTol")
@@ -91,153 +79,110 @@ def create_gui():
         label = tk.Label(window, text="Click the below button to refresh the window.")
         label.pack()
 
-        button = tk.Button(window, text="Refresh", command=refresh_window)
-        button.pack()
+        
+        # Summary
+        # Create a StringVar to store the selected value
+        global selected_project  # Declare it as a global variable
+        selected_project = tk.StringVar()
+        
 
-        # Saving User Info
-        user_info_frame =tk.LabelFrame(frame, text="User Information")
-        user_info_frame.grid(row= 0, column=0, padx=20, pady=10)
+       
+        # Function to update the constant when the Combobox value changes
+        
+        def update_selected_project(event):
+            selected_value = project_combobox.get()
+            selected_project.set(project_combobox.get())
+            print("Selected Project:", selected_project.get())
+            global filtered_summary
 
-        first_name_label = tk.Label(user_info_frame, text="First Name")
-        first_name_label.grid(row=0, column=0)
-        last_name_label = tk.Label(user_info_frame, text="Last Name")
-        last_name_label.grid(row=0, column=1)
+            filtered_summary = [item for item in databaseSummary if item['ProjectName'] == selected_value]
+            print("filtered_summary.DataCase",filtered_summary[0]["DataCase"])
 
-        first_name_entry = tk.Entry(user_info_frame)
-        last_name_entry = tk.Entry(user_info_frame)
-        first_name_entry.grid(row=1, column=0)
-        last_name_entry.grid(row=1, column=1)
+            if selected_value == "New Project":
+                # Display the project_name_label and project_name_entry
+                project_name_label.grid(row=0, column=2)
+                project_name_entry.grid(row=1, column=2)
+                
+                
+            else:
+                
+                # Remove the project_name_label and project_name_entry
+                project_name_label.grid_remove()
+                project_name_entry.grid_remove()
+                # Create the table with the sample data
+                update_table(filtered_summary[0]["DataCase"])
+                
+                
 
-        title_label = tk.Label(user_info_frame, text="Select Project")
-        title_combobox = ttk.Combobox(user_info_frame, values=["", "Mr.", "Ms.", "Dr."])
-        title_label.grid(row=0, column=2)
-        title_combobox.grid(row=1, column=2)
 
-        age_label = tk.Label(user_info_frame, text="Age")
-        age_spinbox = tk.Spinbox(user_info_frame, from_=18, to=110)
-        age_label.grid(row=2, column=0)
-        age_spinbox.grid(row=3, column=0)
+        project_info_frame = tk.LabelFrame(frame, text="User Information")
+        project_info_frame.grid(row=0, column=0, padx=20, pady=10)
 
-        nationality_label = tk.Label(user_info_frame, text="Nationality")
-        nationality_combobox = ttk.Combobox(user_info_frame, values=["Africa", "Antarctica", "Asia", "Europe", "North America", "Oceania", "South America"])
-        nationality_label.grid(row=2, column=1)
-        nationality_combobox.grid(row=3, column=1)
+        project_label = tk.Label(project_info_frame, text="Select Project")
+        project_label.grid(row=0, column=0)
 
-        for widget in user_info_frame.winfo_children():
-            widget.grid_configure(padx=10, pady=5)
+        project_combobox = ttk.Combobox(project_info_frame, values=project_names, textvariable=selected_project)
+        project_combobox.grid(row=1, column=0)
 
-        # Saving Course Info
-        courses_frame = tk.LabelFrame(frame)
-        courses_frame.grid(row=1, column=0, sticky="news", padx=20, pady=10)
-
-        registered_label = tk.Label(courses_frame, text="Registration Status")
-
-        reg_status_var = tk.StringVar(value="Not Registered")
-        registered_check = tk.Checkbutton(courses_frame, text="Currently Registered",
-                                            variable=reg_status_var, onvalue="Registered", offvalue="Not registered")
-
-        registered_label.grid(row=0, column=0)
-        registered_check.grid(row=1, column=0)
-
-        numcourses_label = tk.Label(courses_frame, text= "# Completed Courses")
-        numcourses_spinbox = tk.Spinbox(courses_frame, from_=0, to='infinity')
-        numcourses_label.grid(row=0, column=1)
-        numcourses_spinbox.grid(row=1, column=1)
-
-        numsemesters_label = tk.Label(courses_frame, text="# Semesters")
-        numsemesters_spinbox = tk.Spinbox(courses_frame, from_=0, to="infinity")
-        numsemesters_label.grid(row=0, column=2)
-        numsemesters_spinbox.grid(row=1, column=2)
-
-        for widget in courses_frame.winfo_children():
-            widget.grid_configure(padx=10, pady=5)
-
-        # Accept terms
-        terms_frame = tk.LabelFrame(frame, text="Terms & Conditions")
-        terms_frame.grid(row=2, column=0, sticky="news", padx=20, pady=10)
-
-        accept_var = tk.StringVar(value="Not Accepted")
-        terms_check = tk.Checkbutton(terms_frame, text= "I accept the terms and conditions.",
-                                        variable=accept_var, onvalue="Accepted", offvalue="Not Accepted")
-        terms_check.grid(row=0, column=0)
-
-        # Button
-        button = tk.Button(frame, text="Enter data", command= enter_data)
-        button.grid(row=3, column=0, sticky="news", padx=20, pady=10)
+        # Define project_name_label and project_name_entry
+        project_name_label = tk.Label(project_info_frame, text="Enter Project Name")
+        project_name_entry = tk.Entry(project_info_frame)
 
         # Button to open the new window
-
         open_window_button = ttk.Button(window, text="Open Database test5", command=open_new_window)
         open_window_button.pack()
 
-        def check():
-            with open('exec_log.txt', 'r') as exec_c:
-                exec_command = exec_c.read()
+        # Bind the Combobox to the update function
+        project_combobox.bind('<<ComboboxSelected>>', update_selected_project)
+        # Create the table within the same window
+        # Create the table within the same window
+        global table_frame
+        table_frame = tk.Frame(window)
+        table_frame.pack()
 
-            if len(exec_command) > 0:
-                for widget in window.winfo_children():
-                    widget.destroy()
-                exec(exec_command)
-                with open('exec_log.txt', 'w') as exec_c:
-                    pass
-                window.update()
+        # Initialize the _tree attribute when creating the table_frame
+        table_frame._tree = ttk.Treeview(table_frame, columns=("ID", "CaseName", "Description", "Author", "Date"))
 
-            window.after(100, check)
+        table_frame._tree.heading("#1", text="ID")
+        table_frame._tree.heading("#2", text="CaseName")
+        table_frame._tree.heading("#3", text="Description")
+        table_frame._tree.heading("#4", text="Author")
+        table_frame._tree.heading("#5", text="Date")
 
-        window.after(100, check)
+        table_frame._tree.column("#1", width=50)
+        table_frame._tree.column("#2", width=100)
+        table_frame._tree.column("#3", width=200)
+        table_frame._tree.column("#4", width=100)
+        table_frame._tree.column("#5", width=150)
 
+        table_frame._tree.pack()
         window.mainloop()
+
+        return selected_project
+
     except Exception as e:
         print("Error creating GUI:", e)
     
 
-# def start_gui():
-#     t = threading.Thread(target=create_gui)
-#     t.daemon = True  # Allow the thread to exit when the main program finishes
-#     t.start()
 
-def start_gui():
-    create_gui()
-    root = tk._default_root
-    if root is not None:
-        root.destroy()
+def update_table(data):
+    global table_frame
 
-def gui_thread():
-    create_gui()
+    if table_frame is not None:
+        # Remove existing table rows
+        for item in table_frame._tree.get_children():
+            table_frame._tree.delete(item)
 
-# def main():
-#     start_gui()
-#     previous_code = None
+        # Insert data into the table
+        for item in data:
+            table_frame._tree.insert("", "end", values=(item["ID"], item["CaseName"], item["Description"], item["Author"], item["Date"]))
 
-#     def on_code_change():
-#         nonlocal previous_code
-#         print("Code changed. Reloading GUI...")
-#         previous_code = current_code
-#         start_gui()
 
-#     event_handler = CodeChangeHandler(on_code_change)
-#     observer = Observer()
-#     observer.schedule(event_handler, path=".", recursive=True)
-#     observer.start()
+if __name__ == '__main__':
+    selected_project = create_gui()
+    print("Selected Project:", selected_project.get())  # Access it outside of the function
+    
 
-#     while True:
-#         try:
-#             with open(__file__) as f:
-#                 current_code = f.read()
-#             time.sleep(1)
-#         except Exception as e:
-#             print(f"Error checking code changes: {e}")
-#             break
-
-while True:
-    if keyboard.is_pressed("Ctrl+Alt"):
-        with open('main.py', 'r') as file:
-            file_data = file.read()
-            file_data_start_index = file_data.find("'@Start@'")
-            file_data_end_index = file_data.find("'@End@'")
-            exec_command = file_data[file_data_start_index:file_data_end_index]
-            with open('exec_log.txt', 'w') as txt_file:
-                txt_file.write(exec_command)
 
 
 

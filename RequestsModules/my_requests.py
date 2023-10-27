@@ -3,6 +3,7 @@ import json
 
 API_URL = "http://localhost:5001/v1/databaseproject"
 headers = {"Content-Type": "application/json"}
+API_URL_templates = "http://localhost:5001/v1/template";
 
 def httpGetAllProjects():
     try:
@@ -14,12 +15,12 @@ def httpGetAllProjects():
         data = None  # Set data to None in case of an error
     return data
 
-test = httpGetAllProjects()
+# test = httpGetAllProjects()
 
-if test is not None:
-    print(test)
-else:
-    print("No data retrieved.")
+# if test is not None:
+#     print("httpGetAllProjects:",test)
+# else:
+#     print("No data retrieved.")
 
 def httpAddNewProject(project):
     
@@ -163,3 +164,69 @@ def httpDeleteImg(id, dimId, idImg):
         print(f"An error occurred at delete dimCase: {e}")
 
 
+# getting templets
+
+
+def httpGetAllTemplates():
+    try:
+        response = requests.get(API_URL_templates)
+        data = response.json()  # Use response.json() to parse the JSON data
+
+    except requests.exceptions.RequestException as e:
+        print("An error occurred on get all projects:", e)
+        data = None  # Set data to None in case of an error
+    return data
+
+def httpAddNewTemplate(newTemplate):
+    try:
+        project_json = json.dumps(newTemplate)
+        response = requests.post(f"{API_URL_templates}/", headers=headers, data=project_json)  # Use the json parameter to send data as JSON
+        
+
+    # Handle the response data
+        if response.status_code == 200:
+            print("Request Add new template successful")
+            response_data = response.json()
+            print(response_data)
+        else:
+            print("Request Add new template  failed with status code:", response.status_code)
+    except requests.exceptions.RequestException as e:
+        print("An error occurred at Add new template:", e)
+
+def httpDeleteTemplate(id):
+    try:
+        response = requests.delete(f"{API_URL_templates}/{id}")
+
+        if response.status_code == 200:
+            print("DELETE template request was successful. Resource deleted.")
+        else:
+            print(f"DELETE template request failed with status code: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred at delete template: {e}")
+
+def httpAddDataToTemplate(templateID, newData):
+    try:
+        addCase_json = json.dumps(newData)
+        response = requests.post(f"{API_URL_templates}/{templateID}/data", headers=headers, data=addCase_json)  # Use the json parameter to send data as JSON
+        
+
+    # Handle the response data
+        if response.status_code == 200:
+            print("Request successful template newData")
+            response_data = response.json()
+            print(response_data)
+        else:
+            print("Request failed template newData with status code:", response.status_code)
+    except requests.exceptions.RequestException as e:
+        print("An error occurred template newData:", e)
+
+def httpDeleteDataFromTemplate(templateID, dataIndex):
+    try:
+        response = requests.delete(f"{API_URL_templates}/{templateID}/data/{dataIndex}")
+
+        if response.status_code == 200:
+            print("DELETE data template request was successful. Resource deleted.")
+        else:
+            print(f"DELETE data templete request failed with status code: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        print(f"An error occurred at delete data templete: {e}")
