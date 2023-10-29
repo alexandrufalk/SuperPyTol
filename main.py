@@ -1,7 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+from ttkbootstrap import Style
 from RequestsModules.my_requests import httpGetAllProjects
+from RequestsModules.my_requests import httpGetAllTemplates
 
       
 
@@ -49,34 +51,61 @@ def open_new_window():
     last_name_entry.pack()
 
     # Button to fetch data from the server and save to a file
-    fetch_data_button = ttk.Button(new_window, text="Fetch Data and Save", command=httpGetAllProjects)
+    fetch_data_button = ttk.Button(new_window, text="Fetch Data and Save", command=httpGetAllProjects, style="Secondary.TButton")
     fetch_data_button.pack()
 
 
 selected_project = None  # Initialize it as None
 filtered_summary=[]
 table_frame = None  # Initialize table_frame as a global variable
+selected_template=None
+new_project_name=None
+# view_add_case=False
+
+def save_new_project():
+    print('Save new Project:',selected_template.get(),new_project_name.get())
+
+
+
+
+
 
 def create_gui():
     global table, table_window  # Declare table as a global variable
     databaseSummary=httpGetAllProjects()
+    templates=httpGetAllTemplates()
 
     def extract_project_names(data):
         project_names = [item['ProjectName'] for item in data]
         project_names.append("New Project")
         return project_names
     
+    def extract_template_names(data):
+        project_names = [item['TemplateName'] for item in data]
+        project_names.append("New Template")
+        return project_names
+    
+    
+    
     project_names = extract_project_names(databaseSummary)
+    template_names=extract_template_names(templates)
     print("project_names",project_names)
+    print('template names:',template_names)
 
     try:
         window = tk.Tk()
         window.title("SuperPyTol")
 
+        # Create a ttkbootstrap style
+        style = Style()
+
+        # Apply a style to the window
+        style.theme_use('darkly')
+
         frame = tk.Frame(window)
         frame.pack()
 
-        label = tk.Label(window, text="Click the below button to refresh the window.")
+        label = tk.Label(window, text="Add Case")
         label.pack()
 
         
@@ -84,6 +113,19 @@ def create_gui():
         # Create a StringVar to store the selected value
         global selected_project  # Declare it as a global variable
         selected_project = tk.StringVar()
+
+        global selected_template  # Declare it as a global variable
+        selected_template = tk.StringVar()
+
+        global new_project_name # Declare it as a global variable
+        new_project_name = tk.StringVar()
+
+        global new_case_name # Declare it as a global variable
+        new_case_name = tk.StringVar()
+
+
+
+        
         
 
        
@@ -95,41 +137,87 @@ def create_gui():
             print("Selected Project:", selected_project.get())
             global filtered_summary
 
+            
+
             filtered_summary = [item for item in databaseSummary if item['ProjectName'] == selected_value]
-            print("filtered_summary.DataCase",filtered_summary[0]["DataCase"])
+           
 
             if selected_value == "New Project":
                 # Display the project_name_label and project_name_entry
-                project_name_label.grid(row=0, column=2)
-                project_name_entry.grid(row=1, column=2)
+                project_name_label.grid(row=0, column=2, padx=20, pady=10)
+                project_name_entry.grid(row=1, column=2, padx=20, pady=10)
+                # Display the roject Template label and Project Templat
+                project_templates_label.grid(row=0, column=3, padx=20, pady=10)
+                project_templates_combobox.grid(row=1, column=3, padx=20, pady=10)
+                #Define Save New Project button
+                save_new_project_button.grid(row=1, column=4, padx=20, pady=10)
                 
+     
                 
             else:
-                
+                print("filtered_summary.DataCase",filtered_summary[0]["DataCase"])
                 # Remove the project_name_label and project_name_entry
                 project_name_label.grid_remove()
                 project_name_entry.grid_remove()
+                project_templates_label.grid_remove()
+                project_templates_combobox.grid_remove()
+                save_new_project_button.grid_remove()
                 # Create the table with the sample data
                 update_table(filtered_summary[0]["DataCase"])
+                add_new_case_button.grid(row=2, column=0, padx=20, pady=10)
+                
+                    
+
+                
+        def add_new_case():
+            print("Add new case")
+            new_case_label.grid(row=3, column=0, padx=20, pady=10)
+            new_case_entry.grid(row=4, column=0, padx=20, pady=10)
+            add_case_button.grid(row=5, column=0, padx=20, pady=10)
+
+        def add_case():
+            print("Case added")
+            new_case_label.grid_remove()
+            new_case_entry.grid_remove()
+            add_case_button.grid_remove()
+            print("New casename:",new_case_name.get())
                 
                 
 
 
-        project_info_frame = tk.LabelFrame(frame, text="User Information")
+        project_info_frame = tk.LabelFrame(frame, text="Projects")
         project_info_frame.grid(row=0, column=0, padx=20, pady=10)
 
         project_label = tk.Label(project_info_frame, text="Select Project")
-        project_label.grid(row=0, column=0)
+        project_label.grid(row=0, column=0, padx=20, pady=10)
 
         project_combobox = ttk.Combobox(project_info_frame, values=project_names, textvariable=selected_project)
         project_combobox.grid(row=1, column=0)
 
         # Define project_name_label and project_name_entry
         project_name_label = tk.Label(project_info_frame, text="Enter Project Name")
-        project_name_entry = tk.Entry(project_info_frame)
+        project_name_entry = tk.Entry(project_info_frame, textvariable=new_project_name)
 
+        #Define Project Template label and Project Template
+        project_templates_label = tk.Label(project_info_frame, text="Select Project Templates")
+        project_templates_combobox = ttk.Combobox(project_info_frame, values=template_names, textvariable=selected_template)
+
+
+        save_new_project_button = ttk.Button(project_info_frame, text="Save", command=save_new_project, style="Primary.TButton")
+
+        add_new_case_button = ttk.Button(project_info_frame, text="Add Case", command=add_new_case, style="Primary.TButton")
+
+        add_case_button = ttk.Button(project_info_frame, text="Add", command=add_case, style="Primary.TButton")
+
+
+        
+         # Define new_case_label and new_case_entry
+        new_case_label = tk.Label(project_info_frame, text="Enter Case Name")
+        new_case_entry = tk.Entry(project_info_frame, textvariable=new_case_name)
+
+    
         # Button to open the new window
-        open_window_button = ttk.Button(window, text="Open Database test5", command=open_new_window)
+        open_window_button = ttk.Button(window, text="Open Database", command=open_new_window, style="Primary.TButton")
         open_window_button.pack()
 
         # Bind the Combobox to the update function
@@ -181,6 +269,7 @@ def update_table(data):
 if __name__ == '__main__':
     selected_project = create_gui()
     print("Selected Project:", selected_project.get())  # Access it outside of the function
+    print("Selected Template:", selected_template.get())  # Access it outside of the function
     
 
 
