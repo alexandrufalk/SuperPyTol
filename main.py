@@ -4,55 +4,39 @@ from tkinter import messagebox
 from ttkbootstrap import Style
 from RequestsModules.my_requests import httpGetAllProjects
 from RequestsModules.my_requests import httpGetAllTemplates
+from Modules.database import open_new_window
+from Modules.case import case_gui
 
       
 
-def enter_data():
-    accepted = accept_var.get()
+# def enter_data():
+#     accepted = accept_var.get()
     
-    if accepted=="Accepted":
-        # User info
-        firstname = project_name_entry.get()
-        lastname = last_name_entry.get()
+#     if accepted=="Accepted":
+#         # User info
+#         firstname = project_name_entry.get()
+#         lastname = last_name_entry.get()
         
-        if firstname and lastname:
-            title = project_combobox.get()
-            age = age_spinbox.get()
-            nationality = nationality_combobox.get()
+#         if firstname and lastname:
+#             title = project_combobox.get()
+#             age = age_spinbox.get()
+#             nationality = nationality_combobox.get()
             
-            # Course info
-            registration_status = reg_status_var.get()
-            numcourses = numcourses_spinbox.get()
-            numsemesters = numsemesters_spinbox.get()
+#             # Course info
+#             registration_status = reg_status_var.get()
+#             numcourses = numcourses_spinbox.get()
+#             numsemesters = numsemesters_spinbox.get()
             
-            print("First name: ", firstname, "Last name: ", lastname)
-            print("Title: ", title, "Age: ", age, "Nationality: ", nationality)
-            print("# Courses: ", numcourses, "# Semesters: ", numsemesters)
-            print("Registration status", registration_status)
-            print("------------------------------------------")
-        else:
-            tk.messagebox.showwarning(title="Error", message="First name and last name are required.")
-    else:
-        tk.messagebox.showwarning(title= "Error", message="You have not accepted the terms")
+#             print("First name: ", firstname, "Last name: ", lastname)
+#             print("Title: ", title, "Age: ", age, "Nationality: ", nationality)
+#             print("# Courses: ", numcourses, "# Semesters: ", numsemesters)
+#             print("Registration status", registration_status)
+#             print("------------------------------------------")
+#         else:
+#             tk.messagebox.showwarning(title="Error", message="First name and last name are required.")
+#     else:
+#         tk.messagebox.showwarning(title= "Error", message="You have not accepted the terms")
 
-# Function to open a new window with entry fields
-def open_new_window():
-    new_window = tk.Toplevel()
-    new_window.title("New Window")
-
-    project_name_label = ttk.Label(new_window, text="First Name:")
-    project_name_label.pack()
-    project_name_entry = ttk.Entry(new_window)
-    project_name_entry.pack()
-
-    last_name_label = ttk.Label(new_window, text="Last Name:")
-    last_name_label.pack()
-    last_name_entry = ttk.Entry(new_window)
-    last_name_entry.pack()
-
-    # Button to fetch data from the server and save to a file
-    fetch_data_button = ttk.Button(new_window, text="Fetch Data and Save", command=httpGetAllProjects, style="Secondary.TButton")
-    fetch_data_button.pack()
 
 
 selected_project = None  # Initialize it as None
@@ -182,7 +166,8 @@ def create_gui():
             add_case_button.grid_remove()
             print("New casename:",new_case_name.get())
                 
-                
+        def case_gui_test():
+            case_gui(6,1,True)        
 
 
         project_info_frame = tk.LabelFrame(frame, text="Projects")
@@ -217,7 +202,7 @@ def create_gui():
 
     
         # Button to open the new window
-        open_window_button = ttk.Button(window, text="Open Database", command=open_new_window, style="Primary.TButton")
+        open_window_button = ttk.Button(window, text="Test Case", command=case_gui_test, style="Primary.TButton")
         open_window_button.pack()
 
         # Bind the Combobox to the update function
