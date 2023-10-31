@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from ttkbootstrap import Style
 from Modules.summary import create_gui
-from Modules.case import case_gui, create_histogram, generate_histogram, create_histogram2,pdf
+from Modules.case import case_gui, create_histogram, generate_histogram, create_histogram2,pdf, pdf1
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -17,15 +17,18 @@ def main():
     root = tk.Tk()
     root.title("Matplotlib Histogram in Tkinter")
     style = Style()
+    
 
      # Apply a style to the window
     style.theme_use('darkly')
 
     create_gui(root)
+
+    #first chart
     
 
-    fig = Figure(figsize=(6, 4), dpi=100, facecolor='#696a80')
-    ax = fig.add_subplot(111)
+    fig = Figure(figsize=(6, 6), dpi=100, facecolor='#696a80')
+    ax = fig.add_subplot(211)  #subplot(nrows, ncols, index, **kwargs)
 
     canvas = FigureCanvasTkAgg(fig, master=root)
     canvas_widget = canvas.get_tk_widget()
@@ -43,9 +46,32 @@ def main():
     # Additional styling for the Matplotlib plot
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
+
+    # second chart
+
+    fig1= Figure(figsize=(6, 6), dpi=100, facecolor='#696a80')  # Set figure background color
+    ax1 = fig1.add_subplot(212)
+
     
 
-    plot_button = ttk.Button(root, text="Plot PDF", command=lambda: pdf(data))
+    canvas1 = FigureCanvasTkAgg(fig1, master=root)
+    canvas_widget1 = canvas1.get_tk_widget()
+    canvas_widget1.pack()
+
+    ax1.set_facecolor('#2c2d36') # Set plot background color
+
+    pdf1(ax1,data)
+    ax1.set_prop_cycle(color=[style.colors.primary, style.colors.secondary])
+
+    # Additional styling for the Matplotlib plot
+    ax1.spines["top"].set_visible(False)
+    ax1.spines["right"].set_visible(False)
+
+    # Adjust spacing between subplots
+    fig.subplots_adjust(hspace=0.1)  # Adjust the value as needed to control the vertical spacing
+
+
+    plot_button = ttk.Button(root, text="Plot PDF", command=lambda: pdf(data,root))
     plot_button.pack()
 
     button = ttk.Button(root, text="Exit", command=root.quit)

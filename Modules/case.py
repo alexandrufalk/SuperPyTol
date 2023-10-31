@@ -153,9 +153,16 @@ def create_histogram2(ax, data, title, x_label, y_label,upp_tol,low_tol):
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
 
-def pdf(data):
+def pdf(data,window):
+    # Create a new Tkinter window for the PDF plot
+    pdf_window = tk.Toplevel(window)
+    pdf_window.title("PDF Plot")
+
+    
     # Create a density plot (KDE)
-    plt.figure(figsize=(8, 6))
+
+    fig = plt.figure(figsize=(8, 6), facecolor='#696a80')  # Set figure background color
+    # plt.figure(figsize=(8, 6),facecolor='#696a80')
     plt.title('Probability Density Function (PDF)')
     plt.xlabel('Value')
     plt.ylabel('Density')
@@ -163,11 +170,15 @@ def pdf(data):
     # Convert the list to a NumPy array
     data = np.array(data)
 
+    ax = plt.gca()
+    ax.set_facecolor('#2c2d36') # Set plot background color
+
     # Use seaborn for a smoother KDE plot (optional, you may need to install seaborn)
     # import seaborn as sns
     # sns.kdeplot(data, color='blue', label='KDE')
 
     # Alternatively, you can use Matplotlib's hist method with density=True
+    
     
     plt.hist(data, bins=50, density=True, alpha=0.7, color='#46e3c9', edgecolor='black', label='KDE')
 
@@ -176,11 +187,53 @@ def pdf(data):
     mu, std = norm.fit(data)
     x = np.linspace(min(data), max(data), 100)
     pdf = norm.pdf(x, mu, std)
-    plt.plot(x, pdf, 'k-', linewidth=2, label='Normal PDF')
+    plt.plot(x, pdf, 'k-', color='#0aedf5', linewidth=2, label='Normal PDF')
 
     plt.legend()
     plt.show()
 
+    canvas = FigureCanvasTkAgg(fig, master=pdf_window)
+    canvas_widget = canvas.get_tk_widget()
+    canvas_widget.pack()
+
+
+def pdf1(plt,data):
+    
+
+    # Create a density plot (KDE)
+
+    # plt.title('Probability Density Function (PDF)')
+    # plt.xlabel('Value')
+    # plt.ylabel('Density')
+
+    # Convert the list to a NumPy array
+    data = np.array(data)
+
+    
+
+    # Use seaborn for a smoother KDE plot (optional, you may need to install seaborn)
+    # import seaborn as sns
+    # sns.kdeplot(data, color='blue', label='KDE')
+
+    # Alternatively, you can use Matplotlib's hist method with density=True
+    
+    
+    plt.hist(data, bins=50, density=True, alpha=0.7, color='#46e3c9', edgecolor='black', label='KDE')
+
+    # If you know the underlying probability distribution, you can overlay it for comparison
+    # For example, using a normal distribution as a reference
+    mu, std = norm.fit(data)
+    x = np.linspace(min(data), max(data), 100)
+    pdf = norm.pdf(x, mu, std)
+    plt.plot(x, pdf, color='#0aedf5', linewidth=2, label='Normal PDF')
+
+    # plt.legend()
+    # plt.show()
+    plt.set_title('Probability Density Function (PDF)')
+    plt.set_xlabel('Value')
+    plt.set_ylabel('Density')
+
+    
 
 
 
