@@ -13,7 +13,7 @@ from scipy.stats import norm
 import mpldatacursor  # Import mpldatacursor library
 
 
-
+table_frame_case = None  # Initialize table_frame_case_case as a global variable
 
 def case_gui(projectId, caseId, ViewDatabase ):
     print("Case GUI")
@@ -123,7 +123,7 @@ def case_gui(projectId, caseId, ViewDatabase ):
     # # Display the histogram
     # plt.show()
 
-    return genNum
+    return genNum,dataCaseDimFiltered 
 
 
 def create_histogram(data, window):
@@ -227,13 +227,76 @@ def pdf1(plt,data):
     pdf = norm.pdf(x, mu, std)
     plt.plot(x, pdf, color='#0aedf5', linewidth=2, label='Normal PDF')
 
-    # plt.legend()
+    plt.legend()
     # plt.show()
     plt.set_title('Probability Density Function (PDF)')
     plt.set_xlabel('Value')
     plt.set_ylabel('Density')
 
+def case_table(window,data):
+    print("second table")
     
+    
+    table_frame_case= tk.Frame(window)
+    table_frame_case.pack()
+
+    # Initialize the _tree attribute when creating the table_frame_case
+    table_frame_case._tree = ttk.Treeview(table_frame_case, columns=("ID", "Name", "Description", "Nominal Value", "Upper Tolerance","Lower Tolerance","Sign","Distribution Type","Tolerance Type"))
+
+    table_frame_case._tree.heading("#1", text="ID")
+    table_frame_case._tree.heading("#2", text="Name")
+    table_frame_case._tree.heading("#3", text="Description")
+    table_frame_case._tree.heading("#4", text="Nominal Value")
+    table_frame_case._tree.heading("#5", text="Upper Tolerance")
+    table_frame_case._tree.heading("#6", text="Lower Tolerance")
+    table_frame_case._tree.heading("#7", text="Sign")
+    table_frame_case._tree.heading("#8", text="Distribution Type")
+    table_frame_case._tree.heading("#9", text="Tolerance Type")
+    # table_frame_case._tree.heading("#10", text="Influence %")
+    # table_frame_case._tree.heading("#11", text="Formula")
+    # table_frame_case._tree.heading("#12", text="Remove")
+
+    table_frame_case._tree.column("#1", width=50)
+    table_frame_case._tree.column("#2", width=100)
+    table_frame_case._tree.column("#3", width=200)
+    table_frame_case._tree.column("#4", width=100)
+    table_frame_case._tree.column("#5", width=100)
+    table_frame_case._tree.column("#6", width=100)
+    table_frame_case._tree.column("#7", width=100)
+    table_frame_case._tree.column("#8", width=100)
+    table_frame_case._tree.column("#9", width=100)
+    # table_frame_case._tree.column("#10", width=100)
+    # table_frame_case._tree.column("#11", width=100)
+    # table_frame_case._tree.column("#12", width=100)
+
+    table_frame_case._tree.pack()
+
+    # Populate the table with data
+    if data:
+        for item in data:
+            table_frame_case._tree.insert("", "end", values=(
+                item['ID'], item['Name'], item['Description'], item['NominalValue'],
+                item['UpperTolerance'], item['LowerTolerance'], item['Sign'],
+                item['DistributionType'], item['ToleranceType'], item['Color']
+            ))
+
+    return table_frame_case
+    
+    
+
+def update_table_case(data):
+    print("update table case is running")
+    global table_frame_case
+    
+
+    if table_frame_case is not None:
+        # Remove existing table rows
+        for item in table_frame_case._tree.get_children():
+            table_frame_case._tree.delete(item)
+
+        # Insert data into the table
+        for item in data:
+            table_frame_case._tree.insert("", "end", values=(item["ID"], item["Name"], item["Description"], item["Nominal Value"], item["Upper Tolerance"], item["Lower Tolerance"], item["Sign"], item["Distribution Type"], item["Tolerance Type"]))
 
 
 

@@ -145,6 +145,7 @@ def create_gui(window):
                 project_templates_combobox.grid_remove()
                 save_new_project_button.grid_remove()
                 # Create the table with the sample data
+                print("first table data:",filtered_summary[0]["DataCase"])
                 update_table(filtered_summary[0]["DataCase"])
                 add_new_case_button.grid(row=2, column=0, padx=20, pady=10)
                 
@@ -227,6 +228,7 @@ def create_gui(window):
         table_frame._tree.column("#5", width=150)
 
         table_frame._tree.pack()
+        # window.mainloop()
         # window.mainloop()
 
         return selected_project
