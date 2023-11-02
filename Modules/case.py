@@ -3,6 +3,7 @@ from tkinter import ttk
 from RequestsModules.my_requests import httpGetAllProjects, httpAddNewCaseDim, httpDeleteCaseDim
 from functools import reduce
 import math
+import statistics
 import re
 import random
 import matplotlib.pyplot as plt
@@ -37,22 +38,9 @@ def case_gui(projectId, caseId, ViewDatabase ):
         return
 
     # Worst case nominal
-    worstCaseNominal = sum(
-        (n["NominalValue"] + (n["LowerTolerance"] + n["UpperTolerance"]) / 2)
-        if n["Sign"] == "+"
-        else -(n["NominalValue"] + (n["LowerTolerance"] + n["UpperTolerance"]) / 2)
-        for n in dataCaseDimFiltered
-)
-    # Round to three decimal places
-    worstCaseNominal = round(worstCaseNominal, 3)
-
-    print("worstCaseNominal:",worstCaseNominal)
-
-    #worst case tolerance
-
-    worstCaseTolerance=sum((n["UpperTolerance"]-n["LowerTolerance"])/2 for n in dataCaseDimFiltered ) 
-
-    worstCaseTolerance=round(worstCaseTolerance,3)
+    worstCaseNominal,worstCaseTolerance=worst_case_calculation(dataCaseDimFiltered)
+    
+    
 
     print("worstCaseTolerance:",worstCaseTolerance)
 
@@ -124,6 +112,58 @@ def case_gui(projectId, caseId, ViewDatabase ):
     # plt.show()
 
     return genNum,dataCaseDimFiltered 
+
+def worst_case_calculation(dataCaseDimFiltered):
+    
+    # Worst case nominal
+    worstCaseNominal = sum(
+        (n["NominalValue"] + (n["LowerTolerance"] + n["UpperTolerance"]) / 2)
+        if n["Sign"] == "+"
+        else -(n["NominalValue"] + (n["LowerTolerance"] + n["UpperTolerance"]) / 2)
+        for n in dataCaseDimFiltered
+)
+    # Round to three decimal places
+    worstCaseNominal = round(worstCaseNominal, 3)
+
+    print("worstCaseNominal:",worstCaseNominal)
+
+    #worst case tolerance
+
+    worstCaseTolerance=sum((n["UpperTolerance"]-n["LowerTolerance"])/2 for n in dataCaseDimFiltered ) 
+
+    worstCaseTolerance=round(worstCaseTolerance,3)
+
+    print("worstCaseTolerance:",worstCaseTolerance)
+    return worstCaseNominal,worstCaseTolerance
+
+
+def statistical_calculation(dataCaseDimFiltered):
+    worstCaseNominal,worstCaseTolerance=worst_case_calculation(dataCaseDimFiltered)
+    cpk=1.67
+    genNum=case_gui(6,1,True)[0]
+    mean=statistics.mean(genNum)
+    stddev=statistics.stdev(genNum)
+    statisticalTol = 6 * stddev * cpk
+    Pp = (2 * worstCaseTolerance) / (6 * stddev)
+    PpkU =(worstCaseNominal + worstCaseTolerance - mean) /(3 * stddev)
+    PpkL =(mean- (worstCaseNominal - worstCaseTolerance)) /(3 * stddev)
+    Ppk=min(PpkL,PpkU)
+    sigmaintv = (2 * worstCaseTolerance) / stddev
+
+    statistical_calc={
+      "meanS": mean,
+      "UTS": statisticalTol / 2,
+      "LTS": -statisticalTol / 2,
+      "Samples": 100000,
+      "Range": statisticalTol,
+      "Pp": Pp,
+      "PpK": Ppk,
+      "StDev": stddev,
+      "SigmaInt": sigmaintv
+    }
+
+
+    return statistical_calc
 
 
 def create_histogram(data, window):
@@ -299,4 +339,15 @@ def update_table_case(data):
             table_frame_case._tree.insert("", "end", values=(item["ID"], item["Name"], item["Description"], item["Nominal Value"], item["Upper Tolerance"], item["Lower Tolerance"], item["Sign"], item["Distribution Type"], item["Tolerance Type"]))
 
 
+def create_vertical_table(window, data):
+    # Create a frame for the vertical table
+    frame_vertical_table = tk.Frame(window)
+    frame_vertical_table.pack(side='left')
 
+    # Create a Text widget for the table
+    table = tk.Text(frame_vertical_table, height=len(data) * 2, width=20)
+    table.pack()
+
+    # Insert the data vertically
+    for key, value in data.items():
+        table.insert(tk.END, f"{key}:\n{value}\n")
