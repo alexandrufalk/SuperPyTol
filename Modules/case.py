@@ -88,16 +88,16 @@ def case_gui(projectId, caseId, ViewDatabase ):
    
 
     result = boxMullerTransform(worstCaseNominal, standard_deviation)
-    print("Random numbers generated:", result)
+    # print("Random numbers generated:", result)
 
-    samplenum=1000
+    samplenum=100000
     genNum = []
 
 
     for n in range(0,samplenum):
         genNum.append(round(boxMullerTransform(worstCaseNominal, standard_deviation)[0],2))
 
-    print("genNum:",genNum)
+    # print("genNum:",genNum)
 
 
     # # Create a histogram
@@ -193,9 +193,9 @@ def create_histogram2(ax, data, title, x_label, y_label,upp_tol,low_tol):
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
 
-def pdf(data,window):
+def pdf(data):
     # Create a new Tkinter window for the PDF plot
-    pdf_window = tk.Toplevel(window)
+    pdf_window = tk.Tk()
     pdf_window.title("PDF Plot")
 
     

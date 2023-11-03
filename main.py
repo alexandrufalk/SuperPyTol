@@ -3,6 +3,7 @@ from tkinter import ttk
 from ttkbootstrap import Style
 from Modules.summary import create_gui
 from Modules.case import case_gui, create_histogram, generate_histogram, create_histogram2,pdf, pdf1, case_table,create_vertical_table, statistical_calculation
+from Modules.canvas_drw import draw_line,referenceValue
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -11,9 +12,14 @@ def main():
     # app=create_main_window()
     # create_gui(app)
     data,dataCaseDimFiltered=case_gui(6,1,True)
-    print("Test",case_gui(6,1,True)[0])
-    print("case gui data",data)
-    print("case gui datacaseDimFiltted:",dataCaseDimFiltered)
+
+    referenceValue1=referenceValue(dataCaseDimFiltered)
+    print("referenceValue",referenceValue1)
+
+    
+    # print("Test",case_gui(6,1,True)[0])
+    # print("case gui data",data)
+    # print("case gui datacaseDimFiltted:",dataCaseDimFiltered)
     upp_tol=min(data)
     low_tol=max(data)
     # create_histogram(data,app)
@@ -21,36 +27,34 @@ def main():
     root.title("Matplotlib Histogram in Tkinter")
     style = Style()
 
-     # Create a canvas to hold the root window
+    
+
+     # Create a canvas to hold the frame (to make it scrollable)
     canvas_root = tk.Canvas(root)
-    canvas_root .pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+    canvas_root.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-     # Create a scrollbar
-    scrollbar = tk.Scrollbar(root, orient=tk.VERTICAL, command=canvas_root.yview)
-    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-    canvas_root.config(yscrollcommand=scrollbar.set)
+   # Create a scrollbar
+    scrollbarv = tk.Scrollbar(root, orient=tk.VERTICAL, command=canvas_root.yview)
+    scrollbarv.pack(side=tk.RIGHT, fill=tk.Y)
 
-    # Create a frame to contain the contents of the root window
+    scrollbarh = tk.Scrollbar(root, orient=tk.HORIZONTAL, command=canvas_root.xview)
+    scrollbarh.pack(side=tk.BOTTOM, fill=tk.X)
+
+   
+
+    # Create a frame to contain the content
     content_frame = tk.Frame(canvas_root)
-    canvas_root.create_window((0, 0), window=content_frame, anchor=tk.NW)
-
-    # # Create content for the frame (e.g., labels, buttons, widgets)
-    # for i in range(30):
-    #     label = tk.Label(content_frame, text=f"Label {i}")
-    #     label.pack()
-
-    # Update the canvas when the content changes
-    content_frame.update_idletasks()
-    canvas_root.config(scrollregion=canvas_root.bbox("all"))
     
 
      # Apply a style to the window
     style.theme_use('darkly')
 
-    statistical_frame=ttk.Frame(content_frame)
-    statistical_frame.pack(side='bottom')
+    
 
     create_gui(content_frame)
+
+    statistical_frame=ttk.Frame(content_frame)
+    statistical_frame.pack()
 
     #first chart
     window_height = content_frame.winfo_screenheight()  # Get the screen height
@@ -70,9 +74,6 @@ def main():
     canvas_widget =FigureCanvasTkAgg(fig, master=canvas)
     canvas_widget.get_tk_widget().pack(fill=tk.BOTH, expand=True)  # Fill both horizontally and vertically
 
-    # data = [1, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 5]  # Sample data for the histogram
-    # Change the background color of the plot area
-    
     
     ax.set_facecolor('#2c2d36')
     
@@ -94,11 +95,34 @@ def main():
     create_vertical_table(statistical_frame, statistical_calc)
     
 
-    plot_button = ttk.Button(content_frame, text="Plot PDF", command=lambda: pdf(data,content_frame))
+    plot_button = ttk.Button(statistical_frame, text="Plot PDF", command=lambda: pdf(data))
     plot_button.pack()
 
+    myCanvas = tk.Canvas(root, bg="white", height=600, width=1000)
+
+    # Add a button to get the canvas width
+    get_width_button = tk.Button(root, text="Get Canvas Width", command=lambda:draw_line(dataCaseDimFiltered,referenceValue1,myCanvas))
+    get_width_button.pack()
+
+    myCanvas.pack()
+
     button = ttk.Button(content_frame, text="Exit", command=content_frame.quit)
-    button.pack()
+    button.pack(side='left')
+
+    # Attach the content_frame to the canvas
+    canvas_root.create_window((0, 0), window=content_frame, anchor=tk.NW)
+
+    
+
+    # Configure the scrollbars
+    canvas_root.config(yscrollcommand=scrollbarv.set, xscrollcommand=scrollbarh.set)
+
+     # Update the canvas to fit the content
+    content_frame.update_idletasks()
+    canvas_root.config(scrollregion=canvas_root.bbox("all"))
+    
+
+
 
 
         
