@@ -24,8 +24,13 @@ def main():
     low_tol=max(data)
     # create_histogram(data,app)
     root = tk.Tk()
-    root.title("Matplotlib Histogram in Tkinter")
+    root.geometry('1000x800')
+    root.title("SuperPyTol")
     style = Style()
+     # Apply a style to the window
+    style.theme_use('superhero')
+
+    
 
     
 
@@ -44,26 +49,18 @@ def main():
 
     # Create a frame to contain the content
     content_frame = tk.Frame(canvas_root)
-    
-
-     # Apply a style to the window
-    style.theme_use('darkly')
 
     
 
     create_gui(content_frame)
 
     statistical_frame=ttk.Frame(content_frame)
-    statistical_frame.pack()
-
-    #first chart
-    window_height = content_frame.winfo_screenheight()  # Get the screen height
-    canvas_height = int(0.2* window_height)  # Calculate the canvas height
+    statistical_frame.pack(padx=10,pady=10)
 
 
     # Create the canvas with the calculated height
-    canvas = tk.Canvas(statistical_frame,height=250,width=500)
-    canvas.pack(side = 'left')
+    canvas = tk.Canvas(statistical_frame,height=600, width=300)
+    canvas.pack(side='left',padx=10,pady=10)
 
   
 
@@ -93,21 +90,24 @@ def main():
     # Statistical Tabel
     statistical_calc=statistical_calculation(dataCaseDimFiltered)
     create_vertical_table(statistical_frame, statistical_calc)
+
+    button_frame=ttk.Frame(statistical_frame)
+    button_frame.pack(side='left',padx=10)
     
 
-    plot_button = ttk.Button(statistical_frame, text="Plot PDF", command=lambda: pdf(data))
-    plot_button.pack()
+    plot_button = ttk.Button(button_frame, text="Plot PDF", command=lambda: pdf(data))
+    plot_button.pack(pady=10,side='top',padx=10)
 
-    myCanvas = tk.Canvas(root, bg="white", height=600, width=1000)
+    myCanvas = tk.Canvas(statistical_frame, height=600, width=500,background='gray')
 
     # Add a button to get the canvas width
-    get_width_button = tk.Button(root, text="Get Canvas Width", command=lambda:draw_line(dataCaseDimFiltered,referenceValue1,myCanvas))
-    get_width_button.pack()
+    get_width_button = tk.Button(button_frame, text="Draw tolerance chain", command=lambda:draw_line(dataCaseDimFiltered,referenceValue1,myCanvas))
+    get_width_button.pack(pady=10,side='bottom')
 
-    myCanvas.pack()
+    myCanvas.pack(side='left',padx=10,pady=10)
 
     button = ttk.Button(content_frame, text="Exit", command=content_frame.quit)
-    button.pack(side='left')
+    button.pack(side='left',padx=10,pady=10)
 
     # Attach the content_frame to the canvas
     canvas_root.create_window((0, 0), window=content_frame, anchor=tk.NW)

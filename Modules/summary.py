@@ -85,10 +85,10 @@ def create_gui(window):
         # style.theme_use('darkly')
 
         frame = tk.Frame(window)
-        frame.pack()
+        frame.pack(pady=5)
 
         label = tk.Label(window, text="Add Case")
-        label.pack()
+        label.pack(pady=5)
 
         
         # Summary
@@ -210,7 +210,7 @@ def create_gui(window):
         # Create the table within the same window
         global table_frame
         table_frame = tk.Frame(window)
-        table_frame.pack()
+        table_frame.pack(pady=20)
 
         # Initialize the _tree attribute when creating the table_frame
         table_frame._tree = ttk.Treeview(table_frame, columns=("ID", "CaseName", "Description", "Author", "Date"))

@@ -29,8 +29,7 @@ def referenceValue(canvasDatabase):
 def draw_line(canvasDatabse,referanceValue,myCanvas):
    
     canvas_width = myCanvas.winfo_width()  # Get the canvas width
-    line_length = canvas_width  # Set the line length as a function of canvas width
-    acumCanvas = canvas_width / 4
+    acumCanvas = canvas_width / 2
     ymax=0
     id=1
     for n in canvasDatabse:
@@ -38,7 +37,7 @@ def draw_line(canvasDatabse,referanceValue,myCanvas):
         sign = n["Sign"]
         color=n["Color"]
         text=n["UniqueIdentifier"] + "-> " + str(n["NominalValue"]) + "±" + str(n["UpperTolerance"])
-        x_ref=(x_value * canvas_width) / (4 * referanceValue) if sign == "+" else -(x_value * canvas_width) / (4 * referanceValue)
+        x_ref=(x_value * canvas_width) / (2 * referanceValue) if sign == "+" else -(x_value * canvas_width) / (2 * referanceValue)
         print(x_value,sign,color,x_ref)
         # line1 = myCanvas.create_line(x0, y0, x1, y1, ..., xn, yn, options)
         myCanvas.create_line(acumCanvas, 40*id,acumCanvas+x_ref, 40*id, arrow=tk.LAST,fill=color,width=2)
@@ -54,9 +53,9 @@ def draw_line(canvasDatabse,referanceValue,myCanvas):
         print('acumCanvas:',acumCanvas)
         ymax=40*id+40
         id=id+1
-    myCanvas.create_line(acumCanvas, ymax, canvas_width/4, ymax, arrow=tk.LAST,width=2,fill='red')
-    myCanvas.create_text((acumCanvas+canvas_width/4)/2, ymax-10, text="CL", fill="red")
-    myCanvas.create_line(canvas_width/4, ymax, canvas_width/4, 40,fill='red',width=2)
+    myCanvas.create_line(acumCanvas, ymax, canvas_width/2, ymax, arrow=tk.LAST,width=2,fill='red')
+    myCanvas.create_text((acumCanvas+canvas_width/2)/2, ymax-10, text="CL", fill="red")
+    myCanvas.create_line(canvas_width/2, ymax, canvas_width/2, 40,fill='red',width=2)
     
 
     
