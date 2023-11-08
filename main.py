@@ -31,7 +31,8 @@ def main():
     style.theme_use('superhero')
 
     
-
+    side_nav=ttk.Frame(root)
+    side_nav.pack(side='left')
     
 
      # Create a canvas to hold the frame (to make it scrollable)
@@ -49,6 +50,7 @@ def main():
 
     # Create a frame to contain the content
     content_frame = tk.Frame(canvas_root)
+
 
     
 
@@ -103,6 +105,22 @@ def main():
     # Add a button to get the canvas width
     get_width_button = tk.Button(button_frame, text="Draw tolerance chain", command=lambda:draw_line(dataCaseDimFiltered,referenceValue1,myCanvas))
     get_width_button.pack(pady=10,side='bottom')
+
+     # Add side buttons
+    side_template= tk.Button(side_nav, text="Template", command=lambda:print("Side test template"))
+    side_template.pack(padx=10,pady=10,side='top')
+
+    side_database= tk.Button(side_nav, text="Database", command=lambda:print("Side test database"))
+    side_database.pack(padx=10,pady=10,side='top')
+
+    side_case= tk.Button(side_nav, text="Case", command=lambda:print("Side test case"))
+    side_case.pack(padx=10,pady=10,side='top')
+
+    
+
+
+
+
 
     myCanvas.pack(side='left',padx=10,pady=10)
 
