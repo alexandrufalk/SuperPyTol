@@ -1,9 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
 from ttkbootstrap import Style
+from ttkbootstrap.constants import *
 from Modules.summary import create_gui
 from Modules.case import case_gui, create_histogram, generate_histogram, create_histogram2,pdf, pdf1, case_table,create_vertical_table, statistical_calculation
 from Modules.canvas_drw import draw_line,referenceValue
+from Modules.template import openTemplates
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -56,6 +58,8 @@ def main():
 
     create_gui(content_frame)
 
+   
+
     statistical_frame=ttk.Frame(content_frame)
     statistical_frame.pack(padx=10,pady=10)
 
@@ -107,14 +111,15 @@ def main():
     get_width_button.pack(pady=10,side='bottom')
 
      # Add side buttons
-    side_template= tk.Button(side_nav, text="Template", command=lambda:print("Side test template"))
-    side_template.pack(padx=10,pady=10,side='top')
+    side_template= ttk.Button(side_nav, bootstyle="info", text="Template", command=lambda:openTemplates(root))
+    side_template.pack(padx=10,pady=10)
 
-    side_database= tk.Button(side_nav, text="Database", command=lambda:print("Side test database"))
-    side_database.pack(padx=10,pady=10,side='top')
+    
+    side_database= ttk.Button(side_nav,bootstyle="success",text="Database", command=lambda:print("Side test database"))
+    side_database.pack(padx=10,pady=10)
 
     side_case= tk.Button(side_nav, text="Case", command=lambda:print("Side test case"))
-    side_case.pack(padx=10,pady=10,side='top')
+    side_case.pack(padx=10,pady=10)
 
     
 
