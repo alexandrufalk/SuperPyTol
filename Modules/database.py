@@ -22,3 +22,6 @@ def open_new_window():
     # Button to fetch data from the server and save to a file
     fetch_data_button = ttk.Button(new_window, text="Fetch Data and Save", command=httpGetAllProjects, style="Secondary.TButton")
     fetch_data_button.pack()
+
+
+# create new tk window

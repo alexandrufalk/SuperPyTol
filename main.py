@@ -53,6 +53,9 @@ def main():
     # Create a frame to contain the content
     content_frame = tk.Frame(canvas_root)
 
+    # summary_frame=ttk.Frame(content_frame)
+    # summary_frame.pack(side='left',padx=10, pady=10)
+
 
     
 

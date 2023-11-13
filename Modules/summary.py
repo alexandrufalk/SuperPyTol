@@ -113,7 +113,7 @@ def create_gui(window):
        
         # Function to update the constant when the Combobox value changes
         
-        def update_selected_project(event):
+        def update_senlected_project(event):
             selected_value = project_combobox.get()
             selected_project.set(project_combobox.get())
             print("Selected Project:", selected_project.get())
@@ -205,7 +205,7 @@ def create_gui(window):
         open_window_button.pack()
 
         # Bind the Combobox to the update function
-        project_combobox.bind('<<ComboboxSelected>>', update_selected_project)
+        project_combobox.bind('<<ComboboxSelected>>',update_senlected_project)
         # Create the table within the same window
         # Create the table within the same window
         global table_frame
