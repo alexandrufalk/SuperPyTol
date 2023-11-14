@@ -114,7 +114,7 @@ def main():
     get_width_button.pack(pady=10,side='bottom')
 
      # Add side buttons
-    side_template= ttk.Button(side_nav, bootstyle="info", text="Template", command=lambda:openTemplates(root))
+    side_template= ttk.Button(side_nav, bootstyle="info", text="Template", command=lambda:openTemplates(content_frame))
     side_template.pack(padx=10,pady=10)
 
     
