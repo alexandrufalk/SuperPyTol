@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import ttk
 from RequestsModules.my_requests import httpGetAllTemplates
 
+
+table_frame_template = None  # Initialize table_frame_case_case as a global variable
+
  # Open templates window
 def openTemplates(root):
 
@@ -14,11 +17,20 @@ def openTemplates(root):
         return project_names
     
     template_names=extract_template_names(templates)
+    
+
+
+
+    
+
+    # templateFiltered=templates[templateId-1]
 
 
 
     new_template_name = tk.StringVar()
     selected_template = tk.StringVar()
+
+    
      
     # Toplevel object which will 
     # be treated as a new window
@@ -66,73 +78,78 @@ def openTemplates(root):
     project_templates_label.grid(row=3, column=0, padx=20, pady=10)
     project_templates_combobox.grid(row=4, column=0, padx=20, pady=10)
 
-    template_table(inner_frame, data)
+    def test_template(event):
+        value=selected_template.get()
+        print("selected template:",value)
+
+    project_templates_combobox.bind("<<ComboboxSelected>>",test_template)
+
+
+    # template_table(inner_frame, data)
 
 
 def template_table(window,data):
     print("second table")
     
     
-    table_frame_case= tk.Frame(window)
-    table_frame_case.pack()
+    table_frame_template= tk.Frame(window)
+    table_frame_template.pack()
 
-    # Initialize the _tree attribute when creating the table_frame_case
-    table_frame_case._tree = ttk.Treeview(table_frame_case, columns=("ID", "Name", "Description", "Nominal Value", "Upper Tolerance","Lower Tolerance","Sign","Distribution Type","Tolerance Type"))
+    # Initialize the _tree attribute when creating the table_frame_template
+    table_frame_template._tree = ttk.Treeview(table_frame_template, columns=("Index", "Component Name", "Color"))
 
-    table_frame_case._tree.heading("#1", text="ID")
-    table_frame_case._tree.heading("#2", text="Name")
-    table_frame_case._tree.heading("#3", text="Description")
-    table_frame_case._tree.heading("#4", text="Nominal Value")
-    table_frame_case._tree.heading("#5", text="Upper Tolerance")
-    table_frame_case._tree.heading("#6", text="Lower Tolerance")
-    table_frame_case._tree.heading("#7", text="Sign")
-    table_frame_case._tree.heading("#8", text="Distribution Type")
-    table_frame_case._tree.heading("#9", text="Tolerance Type")
-    # table_frame_case._tree.heading("#10", text="Influence %")
-    # table_frame_case._tree.heading("#11", text="Formula")
-    # table_frame_case._tree.heading("#12", text="Remove")
+    table_frame_template._tree.heading("#1", text="Index")
+    table_frame_template._tree.heading("#2", text="Component Name")
+    table_frame_template._tree.heading("#3", text="Color")
+    # table_frame_template._tree.heading("#4", text="Nominal Value")
+    # table_frame_template._tree.heading("#5", text="Upper Tolerance")
+    # table_frame_template._tree.heading("#6", text="Lower Tolerance")
+    # table_frame_template._tree.heading("#7", text="Sign")
+    # table_frame_template._tree.heading("#8", text="Distribution Type")
+    # table_frame_template._tree.heading("#9", text="Tolerance Type")
+    # table_frame_template._tree.heading("#10", text="Influence %")
+    # table_frame_template._tree.heading("#11", text="Formula")
+    # table_frame_template._tree.heading("#12", text="Remove")
 
-    table_frame_case._tree.column("#1", width=50)
-    table_frame_case._tree.column("#2", width=100)
-    table_frame_case._tree.column("#3", width=200)
-    table_frame_case._tree.column("#4", width=100)
-    table_frame_case._tree.column("#5", width=100)
-    table_frame_case._tree.column("#6", width=100)
-    table_frame_case._tree.column("#7", width=100)
-    table_frame_case._tree.column("#8", width=100)
-    table_frame_case._tree.column("#9", width=100)
-    # table_frame_case._tree.column("#10", width=100)
-    # table_frame_case._tree.column("#11", width=100)
-    # table_frame_case._tree.column("#12", width=100)
+    table_frame_template._tree.column("#1", width=50)
+    table_frame_template._tree.column("#2", width=100)
+    table_frame_template._tree.column("#3", width=200)
+    # table_frame_template._tree.column("#4", width=100)
+    # table_frame_template._tree.column("#5", width=100)
+    # table_frame_template._tree.column("#6", width=100)
+    # table_frame_template._tree.column("#7", width=100)
+    # table_frame_template._tree.column("#8", width=100)
+    # table_frame_template._tree.column("#9", width=100)
+    # table_frame_template._tree.column("#10", width=100)
+    # table_frame_template._tree.column("#11", width=100)
+    # table_frame_template._tree.column("#12", width=100)
 
-    table_frame_case._tree.pack()
+    table_frame_template._tree.pack()
 
     # Populate the table with data
     if data:
         for item in data:
-            table_frame_case._tree.insert("", "end", values=(
-                item['ID'], item['Name'], item['Description'], item['NominalValue'],
-                item['UpperTolerance'], item['LowerTolerance'], item['Sign'],
-                item['DistributionType'], item['ToleranceType'], item['Color']
+            table_frame_template._tree.insert("", "end", values=(
+                item['Index'], item['ComponentName'], item['Color']
             ))
 
-    return table_frame_case
+    return table_frame_template
     
     
 
 def update_table_case(data):
-    print("update table case is running")
-    global table_frame_case
+    print("update table template is running")
+    global table_frame_template
     
 
-    if table_frame_case is not None:
+    if table_frame_template is not None:
         # Remove existing table rows
-        for item in table_frame_case._tree.get_children():
-            table_frame_case._tree.delete(item)
+        for item in table_frame_template._tree.get_children():
+            table_frame_template._tree.delete(item)
 
         # Insert data into the table
         for item in data:
-            table_frame_case._tree.insert("", "end", values=(item["ID"], item["Name"], item["Description"], item["Nominal Value"], item["Upper Tolerance"], item["Lower Tolerance"], item["Sign"], item["Distribution Type"], item["Tolerance Type"]))
+            table_frame_template._tree.insert("", "end", values=(item['Index'], item['ComponentName'], item['Color']))
 
 
 def create_vertical_table(window, data):
