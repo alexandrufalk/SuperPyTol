@@ -21,6 +21,7 @@ def openTemplates(root):
 
 
 
+
     
 
     # templateFiltered=templates[templateId-1]
@@ -29,6 +30,9 @@ def openTemplates(root):
 
     new_template_name = tk.StringVar()
     selected_template = tk.StringVar()
+
+
+    
 
     
      
@@ -80,7 +84,11 @@ def openTemplates(root):
 
     def test_template(event):
         value=selected_template.get()
-        print("selected template:",value)
+        filtered_template = [item for item in templates if item['TemplateName'] == value]
+        print("filtered template data:",filtered_template[0]['Data'])
+        template_table(inner_frame,filtered_template[0]['Data'])
+
+
 
     project_templates_combobox.bind("<<ComboboxSelected>>",test_template)
 
@@ -93,10 +101,11 @@ def template_table(window,data):
     
     
     table_frame_template= tk.Frame(window)
-    table_frame_template.pack()
+    table_frame_template.grid(row=5,column=0,padx=10,pady=10)
 
     # Initialize the _tree attribute when creating the table_frame_template
     table_frame_template._tree = ttk.Treeview(table_frame_template, columns=("Index", "Component Name", "Color"))
+    # table_frame_template._tree['width'] = 350  # Adjust the width as needed
 
     table_frame_template._tree.heading("#1", text="Index")
     table_frame_template._tree.heading("#2", text="Component Name")
@@ -111,9 +120,11 @@ def template_table(window,data):
     # table_frame_template._tree.heading("#11", text="Formula")
     # table_frame_template._tree.heading("#12", text="Remove")
 
-    table_frame_template._tree.column("#1", width=50)
-    table_frame_template._tree.column("#2", width=100)
-    table_frame_template._tree.column("#3", width=200)
+   
+   
+    table_frame_template._tree.column("#1", width=50,anchor='center')
+    table_frame_template._tree.column("#2", width=100,anchor='center')
+    table_frame_template._tree.column("#3", width=100,anchor='center')
     # table_frame_template._tree.column("#4", width=100)
     # table_frame_template._tree.column("#5", width=100)
     # table_frame_template._tree.column("#6", width=100)

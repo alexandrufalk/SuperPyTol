@@ -221,11 +221,11 @@ def create_gui(window):
         table_frame._tree.heading("#4", text="Author")
         table_frame._tree.heading("#5", text="Date")
 
-        table_frame._tree.column("#1", width=50)
-        table_frame._tree.column("#2", width=100)
-        table_frame._tree.column("#3", width=200)
-        table_frame._tree.column("#4", width=100)
-        table_frame._tree.column("#5", width=150)
+        table_frame._tree.column("#1", width=50,anchor='center')
+        table_frame._tree.column("#2", width=100,anchor='center')
+        table_frame._tree.column("#3", width=200,anchor='center')
+        table_frame._tree.column("#4", width=100,anchor='center')
+        table_frame._tree.column("#5", width=150,anchor='center')
 
         table_frame._tree.pack()
         # window.mainloop()
