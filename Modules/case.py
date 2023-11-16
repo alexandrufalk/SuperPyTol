@@ -281,7 +281,7 @@ def case_table(window,data):
     table_frame_case.pack()
 
     # Initialize the _tree attribute when creating the table_frame_case
-    table_frame_case._tree = ttk.Treeview(table_frame_case, columns=("ID", "Name", "Description", "Nominal Value", "Upper Tolerance","Lower Tolerance","Sign","Distribution Type","Tolerance Type"))
+    table_frame_case._tree = ttk.Treeview(table_frame_case, columns=("ID", "Name", "Description", "Nominal Value", "Upper Tolerance","Lower Tolerance","Sign","Distribution Type","Tolerance Type"),show='headings')
 
     table_frame_case._tree.heading("#1", text="ID")
     table_frame_case._tree.heading("#2", text="Name")

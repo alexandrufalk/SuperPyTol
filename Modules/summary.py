@@ -213,7 +213,7 @@ def create_gui(window):
         table_frame.pack(pady=20)
 
         # Initialize the _tree attribute when creating the table_frame
-        table_frame._tree = ttk.Treeview(table_frame, columns=("ID", "CaseName", "Description", "Author", "Date"))
+        table_frame._tree = ttk.Treeview(table_frame, columns=("ID", "CaseName", "Description", "Author", "Date"),show='headings')
 
         table_frame._tree.heading("#1", text="ID")
         table_frame._tree.heading("#2", text="CaseName")

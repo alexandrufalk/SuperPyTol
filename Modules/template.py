@@ -104,7 +104,7 @@ def template_table(window,data):
     table_frame_template.grid(row=5,column=0,padx=10,pady=10)
 
     # Initialize the _tree attribute when creating the table_frame_template
-    table_frame_template._tree = ttk.Treeview(table_frame_template, columns=("Index", "Component Name", "Color"))
+    table_frame_template._tree = ttk.Treeview(table_frame_template, columns=("Index", "Component Name", "Color"),show='headings')
     # table_frame_template._tree['width'] = 350  # Adjust the width as needed
 
     table_frame_template._tree.heading("#1", text="Index")
@@ -119,6 +119,13 @@ def template_table(window,data):
     # table_frame_template._tree.heading("#10", text="Influence %")
     # table_frame_template._tree.heading("#11", text="Formula")
     # table_frame_template._tree.heading("#12", text="Remove")
+
+    # # Show grid lines
+    # style = ttk.Style()
+    # style.configure("Treeview", rowheight=30, borderwidth=1, relief="solid")
+
+    
+
 
    
    
