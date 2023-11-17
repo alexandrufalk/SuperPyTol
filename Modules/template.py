@@ -17,24 +17,10 @@ def openTemplates(root):
         return project_names
     
     template_names=extract_template_names(templates)
-    
-
-
-
-
-    
-
-    # templateFiltered=templates[templateId-1]
-
-
 
     new_template_name = tk.StringVar()
     selected_template = tk.StringVar()
 
-
-    
-
-    
      
     # Toplevel object which will 
     # be treated as a new window
@@ -47,19 +33,7 @@ def openTemplates(root):
     # sets the geometry of toplevel
     newWindow.geometry("400x400")
 
-    # template_info_frame = tk.LabelFrame(newWindow, text="Templates")
-    # template_info_frame.pack()
-    # template_info_frame.grid(row=0, column=0, padx=20, pady=10)
-
     
-    
-    # project_name_label.grid(row=0, column=2, padx=20, pady=10)
-    # project_name_entry.grid(row=1, column=2, padx=20, pady=10)
-    # # A Label widget to show in toplevel
-    # tk.Label(newWindow, text ="Templates").pack()
-    # button = ttk.Button(newWindow, text="Exit", command=newWindow.destroy)
-    # button.pack(side='left',padx=10,pady=10)
-     # Create a frame inside the Toplevel window using grid
     inner_frame = ttk.Frame(newWindow)
     inner_frame.grid(row=0, column=0, padx=10, pady=10)
 
@@ -110,37 +84,12 @@ def template_table(window,data):
     table_frame_template._tree.heading("#1", text="Index")
     table_frame_template._tree.heading("#2", text="Component Name")
     table_frame_template._tree.heading("#3", text="Color")
-    # table_frame_template._tree.heading("#4", text="Nominal Value")
-    # table_frame_template._tree.heading("#5", text="Upper Tolerance")
-    # table_frame_template._tree.heading("#6", text="Lower Tolerance")
-    # table_frame_template._tree.heading("#7", text="Sign")
-    # table_frame_template._tree.heading("#8", text="Distribution Type")
-    # table_frame_template._tree.heading("#9", text="Tolerance Type")
-    # table_frame_template._tree.heading("#10", text="Influence %")
-    # table_frame_template._tree.heading("#11", text="Formula")
-    # table_frame_template._tree.heading("#12", text="Remove")
-
-    # # Show grid lines
-    # style = ttk.Style()
-    # style.configure("Treeview", rowheight=30, borderwidth=1, relief="solid")
-
-    
-
-
    
    
     table_frame_template._tree.column("#1", width=50,anchor='center')
     table_frame_template._tree.column("#2", width=100,anchor='center')
     table_frame_template._tree.column("#3", width=100,anchor='center')
-    # table_frame_template._tree.column("#4", width=100)
-    # table_frame_template._tree.column("#5", width=100)
-    # table_frame_template._tree.column("#6", width=100)
-    # table_frame_template._tree.column("#7", width=100)
-    # table_frame_template._tree.column("#8", width=100)
-    # table_frame_template._tree.column("#9", width=100)
-    # table_frame_template._tree.column("#10", width=100)
-    # table_frame_template._tree.column("#11", width=100)
-    # table_frame_template._tree.column("#12", width=100)
+  
 
     table_frame_template._tree.pack()
 
