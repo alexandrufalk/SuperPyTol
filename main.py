@@ -50,7 +50,7 @@ def main():
    
 
     # Create a frame to contain the content
-    content_frame = tk.Frame(canvas_root,borderwidth=2,relief='solid')
+    content_frame = tk.Frame(canvas_root,borderwidth=2,relief='solid',padx=10,pady=10)
 
 
    
@@ -58,8 +58,8 @@ def main():
     # summary_frame=ttk.Frame(content_frame)
     # summary_frame.pack(side='left',padx=10, pady=10)
 
-    first_frame=ttk.Frame(content_frame,width=350)
-    first_frame.grid(row=0)
+    first_frame=ttk.Frame(content_frame,borderwidth=2,relief='solid')
+    first_frame.grid(row=0,column=0,padx=10,pady=10)
 
 
     side_nav=ttk.Frame(first_frame,borderwidth=2,relief='solid')
@@ -78,8 +78,8 @@ def main():
 
    
 
-    statistical_frame=ttk.Frame(content_frame)
-    statistical_frame.grid(row=1,column=0)
+    statistical_frame=ttk.Frame(content_frame,borderwidth=2,relief='solid')
+    statistical_frame.grid(row=1,column=0,padx=10,pady=10)
 
 
     # Create the canvas with the calculated height
@@ -151,7 +151,7 @@ def main():
     myCanvas.pack(side='left',padx=10,pady=10)
 
     button = ttk.Button(content_frame, text="Exit", command=content_frame.quit)
-    button.grid()
+    button.grid(pady=10)
 
     # Attach the content_frame to the canvas
     canvas_root.create_window((0, 0), window=content_frame, anchor=tk.NW)

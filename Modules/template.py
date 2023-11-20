@@ -72,6 +72,11 @@ def openTemplates(root):
 
 def template_table(window,data):
     print("second table")
+
+    def on_item_click(event):
+        selected_item = table_frame_template._tree.focus()  # Get the selected item
+        item_text = table_frame_template._tree.item(selected_item, "values")  # Get the values of the selected item
+        print("Item clicked:", item_text)
     
     
     table_frame_template= tk.Frame(window)
@@ -99,6 +104,9 @@ def template_table(window,data):
             table_frame_template._tree.insert("", "end", values=(
                 item['Index'], item['ComponentName'], item['Color']
             ))
+
+    # Bind the click event to the Treeview
+    table_frame_template._tree.bind("<<TreeviewSelect>>", on_item_click)
 
     return table_frame_template
     
@@ -131,3 +139,6 @@ def create_vertical_table(window, data):
     # Insert the data vertically
     for key, value in data.items():
         table.insert(tk.END, f"{key}:\n{value}\n")
+
+
+
