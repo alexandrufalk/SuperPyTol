@@ -33,12 +33,11 @@ def main():
     style.theme_use('superhero')
 
     
-    side_nav=ttk.Frame(root)
-    side_nav.pack(side='left')
+    
     
 
      # Create a canvas to hold the frame (to make it scrollable)
-    canvas_root = tk.Canvas(root)
+    canvas_root = tk.Canvas(root,width=500)
     canvas_root.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
    # Create a scrollbar
@@ -51,20 +50,36 @@ def main():
    
 
     # Create a frame to contain the content
-    content_frame = tk.Frame(canvas_root)
+    content_frame = tk.Frame(canvas_root,borderwidth=2,relief='solid')
+
+
+   
 
     # summary_frame=ttk.Frame(content_frame)
     # summary_frame.pack(side='left',padx=10, pady=10)
 
+    first_frame=ttk.Frame(content_frame,width=350)
+    first_frame.grid(row=0)
+
+
+    side_nav=ttk.Frame(first_frame,borderwidth=2,relief='solid')
+    side_nav.grid(row=0, column=0,padx=10)
+    # side_nav_label=ttk.Label(first_frame,text="Side nav")
+    # side_nav_label.pack(fill='both',expand='yes')
+
+    summary_frame=ttk.Frame(first_frame,width=300,borderwidth=2,relief='solid')
+    summary_frame.grid(row=0,column=1)
+    
+
 
     
 
-    create_gui(content_frame)
+    create_gui(summary_frame)
 
    
 
     statistical_frame=ttk.Frame(content_frame)
-    statistical_frame.pack(padx=10,pady=10)
+    statistical_frame.grid(row=1,column=0)
 
 
     # Create the canvas with the calculated height
@@ -93,7 +108,10 @@ def main():
 
     # table cases
 
-    case_table(content_frame,dataCaseDimFiltered)
+    table_frame=ttk.Frame(content_frame)
+    table_frame.grid(row=2,column=0)
+
+    case_table(table_frame,dataCaseDimFiltered)
 
     
     # Statistical Tabel
@@ -133,7 +151,7 @@ def main():
     myCanvas.pack(side='left',padx=10,pady=10)
 
     button = ttk.Button(content_frame, text="Exit", command=content_frame.quit)
-    button.pack(side='left',padx=10,pady=10)
+    button.grid()
 
     # Attach the content_frame to the canvas
     canvas_root.create_window((0, 0), window=content_frame, anchor=tk.NW)
