@@ -231,6 +231,15 @@ def create_gui(window):
         # window.mainloop()
         # window.mainloop()
 
+        def on_item_click(event):
+            selected_item = table_frame._tree.focus()  # Get the selected item
+            item_text = table_frame._tree.item(selected_item, "values")  # Get the values of the selected item
+            
+            print("Item clicked:", item_text)
+
+        # Bind the click event to the Treeview
+        table_frame._tree.bind("<<TreeviewSelect>>", on_item_click)
+
         return selected_project
 
     except Exception as e:

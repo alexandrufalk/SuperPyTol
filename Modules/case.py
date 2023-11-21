@@ -342,7 +342,7 @@ def update_table_case(data):
 def create_vertical_table(window, data):
     # Create a frame for the vertical table
     frame_vertical_table = tk.Frame(window)
-    frame_vertical_table.pack(side='left')
+    frame_vertical_table.grid(row=0,column=1,padx=10,pady=10)
 
     # Create a Text widget for the table
     table = tk.Text(frame_vertical_table, height=len(data) * 2, width=20)

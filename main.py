@@ -26,7 +26,7 @@ def main():
     low_tol=max(data)
     # create_histogram(data,app)
     root = tk.Tk()
-    root.geometry('1000x800')
+    root.geometry('1350x800')
     root.title("SuperPyTol")
     style = Style()
      # Apply a style to the window
@@ -50,7 +50,7 @@ def main():
    
 
     # Create a frame to contain the content
-    content_frame = tk.Frame(canvas_root,borderwidth=2,relief='solid',padx=10,pady=10)
+    content_frame = tk.Frame(canvas_root,padx=10,pady=10)
 
 
    
@@ -76,7 +76,16 @@ def main():
 
     create_gui(summary_frame)
 
-   
+
+    def toggle_frame_visibility():
+        if statistical_frame.grid_info():  # Check if the frame is currently in the grid
+            statistical_frame.grid_remove()  # Hide the frame
+        else:
+            statistical_frame.grid()  # Show the frame
+
+   # Create a button to toggle frame visibility
+    toggle_button = ttk.Button(summary_frame, text="Show Case Statistics", command=toggle_frame_visibility)
+    toggle_button.pack()
 
     statistical_frame=ttk.Frame(content_frame,borderwidth=2,relief='solid')
     statistical_frame.grid(row=1,column=0,padx=10,pady=10)
@@ -84,7 +93,7 @@ def main():
 
     # Create the canvas with the calculated height
     canvas = tk.Canvas(statistical_frame,height=600, width=300)
-    canvas.pack(side='left',padx=10,pady=10)
+    canvas.grid(row=0,column=0,padx=10,pady=10)
 
   
 
@@ -119,17 +128,17 @@ def main():
     create_vertical_table(statistical_frame, statistical_calc)
 
     button_frame=ttk.Frame(statistical_frame)
-    button_frame.pack(side='left',padx=10)
+    button_frame.grid(row=0,column=4)
     
 
     plot_button = ttk.Button(button_frame, text="Plot PDF", command=lambda: pdf(data))
-    plot_button.pack(pady=10,side='top',padx=10)
+    plot_button.grid(row=0,column=0)
 
     myCanvas = tk.Canvas(statistical_frame, height=600, width=500,background='gray')
 
     # Add a button to get the canvas width
     get_width_button = tk.Button(button_frame, text="Draw tolerance chain", command=lambda:draw_line(dataCaseDimFiltered,referenceValue1,myCanvas))
-    get_width_button.pack(pady=10,side='bottom')
+    get_width_button.grid(row=1,column=0)
 
      # Add side buttons
     side_template= ttk.Button(side_nav, bootstyle="info", text="Template", command=lambda:openTemplates(content_frame))
@@ -148,7 +157,7 @@ def main():
 
 
 
-    myCanvas.pack(side='left',padx=10,pady=10)
+    myCanvas.grid(row=0,column=3)
 
     button = ttk.Button(content_frame, text="Exit", command=content_frame.quit)
     button.grid(pady=10)
