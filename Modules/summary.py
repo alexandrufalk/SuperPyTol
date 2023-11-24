@@ -4,7 +4,7 @@ from tkinter import messagebox
 from ttkbootstrap import Style
 from RequestsModules.my_requests import httpGetAllProjects
 from RequestsModules.my_requests import httpGetAllTemplates
-from Modules.database import open_new_window
+from Modules.database import openDatabase
 from Modules.case import case_gui
 from Modules.case import create_histogram
 
@@ -236,6 +236,7 @@ def create_gui(window):
             item_text = table_frame._tree.item(selected_item, "values")  # Get the values of the selected item
             
             print("Item clicked:", item_text)
+
 
         # Bind the click event to the Treeview
         table_frame._tree.bind("<<TreeviewSelect>>", on_item_click)

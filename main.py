@@ -6,6 +6,7 @@ from Modules.summary import create_gui
 from Modules.case import case_gui, create_histogram, generate_histogram, create_histogram2,pdf, pdf1, case_table,create_vertical_table, statistical_calculation
 from Modules.canvas_drw import draw_line,referenceValue
 from Modules.template import openTemplates
+from Modules.database import openDatabase
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
@@ -145,7 +146,7 @@ def main():
     side_template.pack(padx=10,pady=10)
 
     
-    side_database= ttk.Button(side_nav,bootstyle="success",text="Database", command=lambda:print("Side test database"))
+    side_database= ttk.Button(side_nav,bootstyle="success",text="Database", command=lambda:openDatabase(content_frame))
     side_database.pack(padx=10,pady=10)
 
     side_case= tk.Button(side_nav, text="Case", command=lambda:print("Side test case"))
