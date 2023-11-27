@@ -80,7 +80,7 @@ def database_table(window,data):
     table_frame_template.grid(row=5,column=0,padx=10,pady=10)
 
     # Initialize the _tree attribute when creating the table_frame_template
-    table_frame_template._tree = ttk.Treeview(table_frame_template, columns=("Index", "Name", "Description","Unique Identifier","Drw. nr.","Nominal Value","Upper Tolerance","Lower Tolerance"),show='headings')
+    table_frame_template._tree = ttk.Treeview(table_frame_template, columns=("Index", "Name", "Description","Unique Identifier","Drw. nr.","Nominal Value","Upper Tolerance","Lower Tolerance","Tolerance Range","Sign","Distribution Type"),show='headings')
     # table_frame_template._tree['width'] = 350  # Adjust the width as needed
 
     table_frame_template._tree.heading("#1", text="Index")
@@ -91,7 +91,9 @@ def database_table(window,data):
     table_frame_template._tree.heading("#6", text="Nominal Value")
     table_frame_template._tree.heading("#7", text="Upper Tolerance")
     table_frame_template._tree.heading("#8", text="Lower Tolerance")
-   
+    table_frame_template._tree.heading("#9", text="Tolerance Range")
+    table_frame_template._tree.heading("#10", text="Sign")
+    table_frame_template._tree.heading("#11", text="Distribution Type")
    
     table_frame_template._tree.column("#1", width=50,anchor='center')
     table_frame_template._tree.column("#2", width=100,anchor='center')
@@ -101,6 +103,10 @@ def database_table(window,data):
     table_frame_template._tree.column("#6", width=100,anchor='center')
     table_frame_template._tree.column("#7", width=100,anchor='center')
     table_frame_template._tree.column("#8", width=100,anchor='center')
+    table_frame_template._tree.column("#9", width=100,anchor='center')
+    table_frame_template._tree.column("#10", width=100,anchor='center')
+    table_frame_template._tree.column("#11", width=120,anchor='center')
+  
   
   
   
@@ -110,8 +116,9 @@ def database_table(window,data):
     # Populate the table with data
     if data:
         for item in data:
+            tol_range=item["UpperTolerance"]-item["LowerTolerance"]
             table_frame_template._tree.insert("", "end", values=(
-                item['ID'], item['Name'], item['Description'], item['UniqueIdentifier'], item["DrwNr"], item["NominalValue"], item["UpperTolerance"], item["LowerTolerance"]
+                item['ID'], item['Name'], item['Description'], item['UniqueIdentifier'], item["DrwNr"], item["NominalValue"], item["UpperTolerance"], item["LowerTolerance"], tol_range,item['Sign'],item['DistributionType']
             ))
 
     # Bind the click event to the Treeview
